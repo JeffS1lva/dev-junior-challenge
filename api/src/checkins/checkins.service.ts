@@ -12,7 +12,7 @@ export interface CheckIn {
   id: string;
   cpf: string;
   nome: string;
-  arrivedAt: Date;
+  horarioChegada: Date;
 }
 
 @Injectable()
@@ -35,7 +35,7 @@ export class CheckInsService {
       id: randomUUID(),
       cpf,
       nome,
-      arrivedAt: new Date(),
+      horarioChegada: new Date(),
     };
 
     this.fila.push(checkIn);
