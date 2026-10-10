@@ -1,11 +1,15 @@
-import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { CheckInsController } from './check-ins/check-ins.controller';
-import { CheckInsService } from './check-ins/check-ins.service';
+import { CheckInsController } from './checkins/checkins.controller.js';
+import { CheckInsService } from './checkins/checkins.service.js';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), HttpModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    // Cliente HTTP usado para falar com o mock-service.
+    HttpModule,
+  ],
   controllers: [CheckInsController],
   providers: [CheckInsService],
 })

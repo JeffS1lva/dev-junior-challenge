@@ -8,3 +8,4 @@ build/
 coverage/
 AVALIACAO-INTERNA.md
 mock-service/package-lock.json
+mock-service/pnpm-lock.yaml
