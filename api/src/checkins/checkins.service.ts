@@ -42,7 +42,7 @@ export class CheckInsService {
         minute: '2-digit',
       });
       throw new ConflictException(
-        `${checkInExistente.nome} já realizou o check-in às ${hora} e está na fila.`,
+        `Check-in já registrado às ${hora}. Se precisar de ajuda, procure a recepção.`,
       );
     }
 
