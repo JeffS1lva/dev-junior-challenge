@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { Recepcao } from '@/pages/Recepcao';
 import { Totem } from '@/pages/Totem';
+import { cn } from '@/lib/utils';
 
 type Modo = 'totem' | 'recepcao';
 
 export function App() {
   const [modo, setModo] = useState<Modo>('totem');
   // Incrementado a cada check-in novo; a Recepcao observa e recarrega a fila.
-  const [, setVersao] = useState(0);
+  const [versao, setVersao] = useState(0);
 
   return (
     <div>
@@ -40,9 +41,11 @@ export function App() {
       </header>
 
       <main className="mx-auto max-w-220 px-4 pt-6 pb-12">
-
-        <Totem aoRegistrar={() => setVersao((v) => v + 1)} />
-
+        {modo === 'totem' ? (
+          <Totem aoRegistrar={() => setVersao((v) => v + 1)} />
+        ) : (
+          <Recepcao versao={versao} />
+        )}
       </main>
     </div>
   );
