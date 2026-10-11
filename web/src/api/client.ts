@@ -27,7 +27,7 @@ export async function request<T>(caminho: string, init?: RequestInit): Promise<T
   const corpo = await resposta.json().catch(() => null);
 
   if (!resposta.ok) {
-    throw new ApiError(resposta.status, mensagemDoErro(corpo));
+    throw new ApiError(resposta.status, mensagemDoErro(corpo, resposta.status));
   }
 
   return corpo as T;
@@ -35,10 +35,13 @@ export async function request<T>(caminho: string, init?: RequestInit): Promise<T
 
 // Descobri que o formato do erro muda: 404 e 409 trazem uma string,
 // mas o 400 do class-validator traz um array com cada regra violada.
-// Junto tudo numa frase para a tela não precisar saber disso.
-function mensagemDoErro(corpo: unknown): string {
+// E quando a API está fora, o proxy do Vite devolve um 500 sem corpo
+// JSON — por isso o fallback por status. Junto tudo numa frase para a
+// tela não precisar saber disso.
+function mensagemDoErro(corpo: unknown, status: number): string {
   const message = (corpo as { message?: unknown } | null)?.message;
   if (typeof message === 'string') return message;
   if (Array.isArray(message)) return message.join(' ');
+  if (status >= 500) return 'A API não respondeu. Tente novamente em instantes.';
   return 'Erro inesperado ao falar com a API.';
 }
