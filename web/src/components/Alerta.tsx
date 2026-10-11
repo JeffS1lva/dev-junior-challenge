@@ -3,7 +3,7 @@ interface Props {
 }
 
 /**
- * Exibe o erro vindo da API. A mensagem já chega pronta do back-end, então a
+ * Exibe o erro vindo da API. A mensagem já chega pronta do back-end.
  */
 export function Alerta({ mensagem }: Props) {
   return (
