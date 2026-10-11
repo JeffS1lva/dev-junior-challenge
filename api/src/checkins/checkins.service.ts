@@ -35,14 +35,14 @@ export class CheckInsService {
  * no cadastro quando entrou — repetir a chamada HTTP seria desperdício.
  */
   async create(cpf: string): Promise<CheckIn> {
-    const checkInExistente = this.fila.find((c) => c.cpf === cpf);
+    const checkInExistente = this.fila.find((checkIn) => checkIn.cpf === cpf);
     if (checkInExistente) {
       const hora = checkInExistente.horarioChegada.toLocaleTimeString('pt-BR', {
         hour: '2-digit',
         minute: '2-digit',
-      })
+      });
       throw new ConflictException(
-        `${checkInExistente.nome} já realizou o check-in às ${hora} e está na fila.`
+        `${checkInExistente.nome} já realizou o check-in às ${hora} e está na fila.`,
       );
     }
 

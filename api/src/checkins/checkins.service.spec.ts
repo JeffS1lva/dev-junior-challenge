@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { NotFoundException, ServiceUnavailableException } from '@nestjs/common';
+import { ConflictException, NotFoundException, ServiceUnavailableException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { of, throwError } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -48,4 +48,15 @@ describe('CheckInsService', () => {
       ServiceUnavailableException,
     );
   });
+
+  it('não deixa o mesmo paciente entrar duas vezes na fila', async () => {
+    http.get.mockReturnValue(of({ data: { nome: 'Ana Souza' } }));
+
+    await service.create('11111111111');
+
+    await expect(service.create('11111111111')).rejects.toBeInstanceOf(
+      ConflictException,
+    );
+    expect(service.listar()).toHaveLength(1);
+  })
 });
