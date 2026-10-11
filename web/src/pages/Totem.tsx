@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { criarCheckIn, type CheckIn } from '@/api/checkIns';
 import { ApiError } from '@/api/client';
 import { Alerta } from '@/components/Alerta';
@@ -18,6 +18,26 @@ export function Totem({ aoRegistrar }: Props) {
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [recibo, setRecibo] = useState<CheckIn | null>(null);
+  const [segundos, setSegundos] = useState(5);
+
+  useEffect(() => {
+    if (!recibo) return;
+
+    setSegundos(5);
+
+    //Duas funções distintas: uma para contar os segundos, outra para limpar o recibo e o CPF.
+    const contagem = setInterval(() => setSegundos((s) => s - 1), 1000);
+    const limpeza = setTimeout(() => {
+      setRecibo(null);
+      setCpf('');
+    }, 5000)
+
+    //Cancelar os dois ao sair evita que disparem depois que a tela mudou.
+    return () => {
+      clearInterval(contagem);
+      clearTimeout(limpeza);
+    };
+  }, [recibo]);
 
   function digitar(digito: string) {
     setErro(null);
@@ -72,19 +92,12 @@ export function Totem({ aoRegistrar }: Props) {
             Chegada às {hhmm(new Date(recibo.horarioChegada))}
           </p>
           <p className="text-sm text-muted-foreground">
-            Aguarde ser chamado na recepção.
+            Check-in realizado. Aguarde ser chamado na recepção.
           </p>
 
-          <Button
-            variant="outline"
-            className="mt-5"
-            onClick={() => {
-              setRecibo(null);
-              setCpf('');
-            }}
-          >
-            Novo check-in
-          </Button>
+          <p className='mt-5 text-sm tabular-nums text-muted-foreground'>
+            Essa tela se fecha em {segundos} segundos
+          </p>
         </div>
       </div>
     );
