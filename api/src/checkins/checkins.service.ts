@@ -40,6 +40,7 @@ export class CheckInsService {
       const hora = checkInExistente.horarioChegada.toLocaleTimeString('pt-BR', {
         hour: '2-digit',
         minute: '2-digit',
+        timeZone: 'America/Sao_Paulo',
       });
       throw new ConflictException(
         `Check-in já registrado às ${hora}. Se precisar de ajuda, procure a recepção.`,
