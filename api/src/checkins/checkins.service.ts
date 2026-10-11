@@ -1,8 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import {
+  ConflictException,
   Injectable,
   NotFoundException,
-  ServiceUnavailableException,
+  ServiceUnavailableException
 } from '@nestjs/common';
 import type { AxiosError } from 'axios';
 import { randomUUID } from 'node:crypto';
@@ -23,12 +24,28 @@ export class CheckInsService {
   constructor(private readonly http: HttpService) { }
 
   /**
-   * Registra o paciente na fila:
-   * 1. consulta o cadastro externo pelo CPF;
-   * 2. se não existir, devolve 404 com mensagem clara;
-   * 3. grava na fila com o horário de chegada.
-   */
+ * Registra o paciente na fila:
+ * 1. recusa com 409 se o CPF já estiver na fila — evita duplicar o
+ *    atendimento quando o paciente toca o botão duas vezes no totem;
+ * 2. consulta o cadastro externo para obter o nome (404 se o CPF não
+ *    existir, 503 se o cadastro estiver indisponível);
+ * 3. grava na fila com o horário de chegada.
+ *
+ * A checagem vem antes da consulta porque um CPF já na fila foi validado
+ * no cadastro quando entrou — repetir a chamada HTTP seria desperdício.
+ */
   async create(cpf: string): Promise<CheckIn> {
+    const checkInExistente = this.fila.find((c) => c.cpf === cpf);
+    if (checkInExistente) {
+      const hora = checkInExistente.horarioChegada.toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+      throw new ConflictException(
+        `${checkInExistente.nome} já realizou o check-in às ${hora} e está na fila.`
+      );
+    }
+
     const nome = await this.buscarNomeNoCadastro(cpf);
 
     const checkIn: CheckIn = {
