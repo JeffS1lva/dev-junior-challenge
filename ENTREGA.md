@@ -278,6 +278,12 @@ e permitir busca por nome ou CPF — úteis quando a fila cresce.
 aplicação e bata nos endpoints cobriria a fiação (rotas, `ValidationPipe`,
 prefixo), que hoje validei manualmente com `curl`.
 
+**Documentação da API.** Com dois endpoints, a tabela acima dá conta. Num
+projeto com mais rotas, exporia um contrato OpenAPI com `@nestjs/swagger`,
+para que quem consome a API não dependa de ler o código ou o README — e para
+que o contrato acompanhe as mudanças em vez de envelhecer em um documento à
+parte.
+
 ### Avisar o paciente pelo celular
 
 O cadastro devolve `cpf`, `nome`. Se ele também tivesse
