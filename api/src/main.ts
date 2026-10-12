@@ -13,7 +13,7 @@ async function bootstrap() {
 
   const port = Number(process.env.PORT ?? 3000);
   await app.listen(port);
-  console.log(`Api de check-in rondando em http://localhost:${port}/api `);
+  console.log(`Api de check-in rodando em http://localhost:${port}/api `);
 }
 
 await bootstrap();
