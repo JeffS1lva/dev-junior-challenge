@@ -130,7 +130,7 @@ Onde ele entrou:
 
 Onde ele não entrou: nas decisões. A escolha de separar 404 de 503, de não
 expor o nome do paciente na mensagem de duplicidade, de apagar a confirmação
-do totem depois de 10 segundos e de guardar a fila em memória foram minhas,
+do totem depois de 5 segundos e de guardar a fila em memória foram minhas,
 pensando no contexto de uso.
 
 Validei tudo o que entreguei. Cada endpoint foi testado na mão com `curl`
@@ -186,7 +186,7 @@ hospital naquele momento.
 
 A mensagem passou a trazer só o horário e orientar a procurar a recepção, que
 tem contexto para resolver. Pelo mesmo motivo, a tela de confirmação do
-check-in se apaga sozinha após 10 segundos: o nome do paciente anterior não
+check-in se apaga sozinha após 5 segundos: o nome do paciente anterior não
 precisa ficar visível para quem está na fila.
 
 ### Duplicidade é verificada antes de consultar o cadastro
