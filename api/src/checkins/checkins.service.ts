@@ -34,7 +34,7 @@ export class CheckInsService {
  * A checagem vem antes da consulta porque um CPF já na fila foi validado
  * no cadastro quando entrou — repetir a chamada HTTP seria desperdício.
  */
-  async create(cpf: string): Promise<CheckIn> {
+  async criar(cpf: string): Promise<CheckIn> {
     const checkInExistente = this.fila.find((checkIn) => checkIn.cpf === cpf);
     if (checkInExistente) {
       const hora = checkInExistente.horarioChegada.toLocaleTimeString('pt-BR', {

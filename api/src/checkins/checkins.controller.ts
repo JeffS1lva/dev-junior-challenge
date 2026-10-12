@@ -10,12 +10,12 @@ export class CheckInsController {
   /** POST /api/checkins — registra o paciente na fila a partir do CPF. */
   @Post()
   create(@Body() dto: CreateCheckInDto): Promise<CheckIn> {
-    return this.checkIns.create(dto.cpf);
+    return this.checkIns.criar(dto.cpf);
   }
 
   /** GET /api/checkins — lista a fila de check-ins. */
   @Get()
-  list(): CheckIn[] {
+  listar(): CheckIn[] {
     return this.checkIns.listar();
   }
 }

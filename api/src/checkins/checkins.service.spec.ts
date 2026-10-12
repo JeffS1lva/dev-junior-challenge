@@ -23,7 +23,7 @@ describe('CheckInsService', () => {
   it('registra o check-in com o nome vindo do cadastro externo', async () => {
     http.get.mockReturnValue(of({ data: { nome: 'Maria Silva' } }));
 
-    const checkIn = await service.create('12345678901');
+    const checkIn = await service.criar('12345678901');
 
     expect(checkIn.nome).toBe('Maria Silva');
     expect(checkIn.cpf).toBe('12345678901');
@@ -33,7 +33,7 @@ describe('CheckInsService', () => {
   it('devolve 404 quando o CPF não existe no cadastro', async () => {
     http.get.mockReturnValue(throwError(() => ({ response: { status: 404 } })));
 
-    await expect(service.create('00000000000')).rejects.toBeInstanceOf(
+    await expect(service.criar('00000000000')).rejects.toBeInstanceOf(
       NotFoundException,
     );
     // Nada entra na fila quando o paciente não foi encontrado.
@@ -44,7 +44,7 @@ describe('CheckInsService', () => {
 
     http.get.mockReturnValue(throwError(() => new Error('ECONNREFUSED')));
 
-    await expect(service.create('12345678901')).rejects.toBeInstanceOf(
+    await expect(service.criar('12345678901')).rejects.toBeInstanceOf(
       ServiceUnavailableException,
     );
   });
@@ -52,9 +52,9 @@ describe('CheckInsService', () => {
   it('não deixa o mesmo paciente entrar duas vezes na fila', async () => {
     http.get.mockReturnValue(of({ data: { nome: 'Ana Souza' } }));
 
-    await service.create('11111111111');
+    await service.criar('11111111111');
 
-    await expect(service.create('11111111111')).rejects.toBeInstanceOf(
+    await expect(service.criar('11111111111')).rejects.toBeInstanceOf(
       ConflictException,
     );
     expect(service.listar()).toHaveLength(1);
