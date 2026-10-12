@@ -9,7 +9,7 @@ export interface CheckIn {
 
 export function criarCheckIn(cpf: string): Promise<CheckIn> {
   return request<CheckIn>('/checkins', {
-    method: 'Post',
+    method: 'POST',
     body: JSON.stringify({ cpf }),
   });
 }
